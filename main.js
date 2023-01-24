@@ -1,15 +1,22 @@
-const gameEngine = new GameEngine();
+var assetMangager = new AssetManager();
 
-const ASSET_MANAGER = new AssetManager();
+assetMangager.queueDownload("./demonFire.png");
+assetMangager.queueDownload("./demonFireLeft.png");
 
-ASSET_MANAGER.queueDownload("./demonFire.png")
-ASSET_MANAGER.downloadAll(() => {
-	const canvas = document.getElementById("gameWorld");
-	const ctx = canvas.getContext("2d");
 
-    gameEngine.addEntity(new fireBoss(gameEngine));
 
-	gameEngine.init(ctx);
+assetMangager.downloadAll(() => {
+var canvas = document.getElementById('gameWorld');
+var ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+var gameEngine = new GameEngine();
+PARAMS.BLOCKWIDTH = PARAMS.BITWIDTH * PARAMS.SCALE;
+PARAMS.BLOCKHEIGHT = PARAMS.BITHEIGHT * PARAMS.SCALE;
+PARAMS.CANVAS_WIDTH = canvas.width;
+PARAMS.CANVAS_HEIGHT = canvas.height;
 
-	gameEngine.start();
+gameEngine.init(ctx);
+gameEngine.addEntity(new SceneManager(gameEngine));
+gameEngine.start();
+
 });
