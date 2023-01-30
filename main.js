@@ -1,6 +1,6 @@
 var assetMangager = new AssetManager();
 
-assetMangager.queueDownload("./knight_sprite.png");
+assetMangager.queueDownload("./knight_sprite_full.png");
 
 
 

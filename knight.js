@@ -2,7 +2,7 @@ class knight{
 
     constructor(game){
         this.game = game;
-        this.spritesheet = assetMangager.getAsset("./knight_sprite.png");
+        this.spritesheet = assetMangager.getAsset("./knight_sprite_full.png");
 
         this.x = 0;
         this.y = 0;
@@ -22,6 +22,8 @@ class knight{
                 this.animations[i].push([]);
             }
         }
+
+        //right walking
         this.animations[0][0] = new Animator(this.spritesheet,0,0 ,55, 80, 6, .2, 25,  false,true)
 
 
