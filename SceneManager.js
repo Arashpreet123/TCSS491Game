@@ -4,8 +4,8 @@ class SceneManager {
         this.game.camera = this;
         this.x = 0;
         this.elapsedTime = 0;
-        this.knight = new knight(this.game, 100, 100); 
-        this.game.addEntity(this.knight);
+        this.fireBoss = new fireBoss(this.game, 100, 100); 
+        this.game.addEntity(this.fireBoss);
     };
 
     
