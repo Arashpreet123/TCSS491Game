@@ -1,3 +1,4 @@
+
 class SceneManager {
     constructor(game) {
         this.game = game;
@@ -6,6 +7,7 @@ class SceneManager {
         this.elapsedTime = 0;
         this.knight = new knight(this.game, 100, 100); 
         this.game.addEntity(this.knight);
+
     };
 
     
