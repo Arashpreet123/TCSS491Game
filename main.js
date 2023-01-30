@@ -1,9 +1,6 @@
 var assetMangager = new AssetManager();
 
-assetMangager.queueDownload("./demonFire.png");
-assetMangager.queueDownload("./demonFireLeft.png");
-assetMangager.queueDownload("./slime_demonboss_specialmoves.png");
-assetMangager.queueDownload("./slime_demonboss_specialmovesLeft.png");
+assetMangager.queueDownload("./knight_sprite.png");
 
 
 
