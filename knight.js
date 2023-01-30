@@ -2,7 +2,8 @@ class knight{
 
     constructor(game){
         this.game = game;
-        this.animator = new Animator(ASSET_MANAGER.getAsset("./knight_sprite.png"), 0, 0, 80, 75, 6, .1 ,5, false);
+        this.spritesheet = assetMangager.getAsset("./knight_sprite.png");
+
         this.x = 0;
         this.y = 0;
         this.speed = 400;
@@ -21,21 +22,20 @@ class knight{
                 this.animations[i].push([]);
             }
         }
+        this.animations[0][0] = new Animator(this.spritesheet,0,0 ,55, 80, 6, .2, 25,  false,true)
+
 
         //facing right
     }
 
     update() {
-        this.x += this.speed * this.game.clockTick;
-        if(this.x > 1200){
-            this.x = 0;
-        }
+        
 
     };
 
 
     draw(ctx) {
-        this.animator.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE);
 
     };
 
