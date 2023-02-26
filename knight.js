@@ -10,17 +10,14 @@ class knight{
         this.y = 0;
         this.speed = 400;
         this.facing = 0; //0=right, 1 = left
-        this.state = 1; // 0 = idle, 1 = running, 2 = jumping/falling 
+        this.state = 0; // 0 = idle, 1 = running, 2 = jumping/falling 
         this.states = {
-            idle: 0,
-            run: 1,
-            normAttack: 2,
-            skullAttack: 3,
-            hit: 4,
-            death: 5,
-            jump: 6
+            idle: 0,        
+            jump: 1,
         }
+        this.playerJump = false;
         //animations
+        this.updateBB();
         this.animations = [];
         this.loadAnimations();
     };
@@ -48,11 +45,24 @@ class knight{
 
     }
 
+    updateBB(){
+        this.lastBB = this.BB;
+        if(this.state === 0){
+            this.BB = new BoundingBox(this.x+60, this.y+10, 80, 170);
+        }
+        else if(this.state === 1){
+            this.BB = new BoundingBox(this.x+60, this.y+10, 80, 170);
+        }
+        // this.topBB = new BoundingBox(this.x+20, this.y+130, PARAMS.PLAYERWIDTH, 0);
+        // this.rightBB = new BoundingBox(this.x+20+PARAMS.PLAYERWIDTH, this.y+130, 0, PARAMS.PLAYERHEIGHT);
+        // this.leftBB = new BoundingBox(this.x+20, this.y+130, 0, PARAMS.PLAYERHEIGHT);  
+    };
     update() {
         const TICK = this.game.clockTick;
         const DE_ACC = 200;
-        const RUN = 200;
+        const RUN = 100;
         const MAXFALL = 200;
+        this.velocity.y += 50 * TICK;
         
         if(this.state != this.states.jump){
             if (this.game.left) {
@@ -64,29 +74,48 @@ class knight{
             if(!this.game.left && !this.game.right){
                 this.velocity.x = 0;
             }     
-            if(this.game.attack){
-                this.shoot = true;
-                this.velocity.x = 0;
-            }
-            else if(this.game.digit1 && (this.curMana >= 50)){       
-                this.specialAttack1 = true;
-            }
-            if(this.game.jump && this.playerJump){
+            if(this.game.jump){
+                console.log("JUMp");
                 this.state = this.states.jump;  
-                this.velocity.y = -MAXFALL;
+                this.velocity.y = -50*TICK;
                 this.animations[this.state][this.facing].elapsedTime = 0;
                 
                 this.playerJump = false;
             }
             
-    };
+        }
+        else{
+            
+            this.animations[this.state][this.facing].elapsedTime = 0;
+            
+        }
+        var that = this;
+            this.game.entities.forEach(function (entity) {
+            if (entity.BB && that.BB.collide(entity.BB)) {
+                if (that.velocity.y > 0) { 
+                    if ((entity instanceof BackGround) && (that.lastBB.bottom <= entity.BB.top)){
+                    
+                        that.playerJump = true;
+                        that.velocity.y = 0;
+                        that.y = entity.BB.top - that.lastBB.height - 10;
+                        if(that.state == that.states.jump) that.state = that.states.idle;
+                        that.updateBB();
+                    }
+                }
+                }
+        });
         this.x += this.velocity.x * TICK * PARAMS.SCALE;
-        // this.y += this.velocity.y * TICK * PARAMS.SCALE;
+        this.y += this.velocity.y * TICK * PARAMS.SCALE;
+        this.updateBB();
     }
 
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE);
-
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE/2);
+        // if(debug){
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+            // ctx.strokeRect(this.rightBB.x-this.game.camera.x, this.rightBB.y-this.game.camera.y, this.rightBB.width, this.rightBB.height);
+            // }
     };
 
 
