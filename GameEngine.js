@@ -6,19 +6,26 @@ class GameEngine {
 
         // Everything that will be updated and drawn each frame
         this.entities = [];
-
         // Information on the input
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
+        this.E = false;
+        this.digit1 = false;
+        this.attack = false;
+        this.jump = false;
+        this.c = false;
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+        this.inCanvas = true;
         this.keys = {};
-
         // Options and the Details
         this.options = options || {
             debugging: false,
         };
     };
-
     init(ctx) {
         this.ctx = ctx;
         this.startInput();
@@ -26,10 +33,10 @@ class GameEngine {
     };
 
     start() {
-        this.running = true;
+        var that = this;
         const gameLoop = () => {
             this.loop();
-            requestAnimFrame(gameLoop, this.ctx.canvas);
+            requestAnimFrame(gameLoop, that.ctx.canvas);
         };
         gameLoop();
     };
@@ -52,8 +59,18 @@ class GameEngine {
                 console.log("CLICK", getXandY(e));
             }
             this.click = getXandY(e);
-        });
 
+            this.attack = true;
+        });
+        this.ctx.canvas.addEventListener("mouseup", e => {
+            if (this.options.debugging) {
+                console.log("CLICK", getXandY(e));
+            }
+            // this.click = getXandY(e);
+           this.attack = false;
+
+
+        });
         this.ctx.canvas.addEventListener("wheel", e => {
             if (this.options.debugging) {
                 console.log("WHEEL", getXandY(e), e.wheelDelta);
@@ -61,7 +78,6 @@ class GameEngine {
             e.preventDefault(); // Prevent Scrolling
             this.wheel = e;
         });
-
         this.ctx.canvas.addEventListener("contextmenu", e => {
             if (this.options.debugging) {
                 console.log("RIGHT_CLICK", getXandY(e));
@@ -70,12 +86,90 @@ class GameEngine {
             this.rightclick = getXandY(e);
         });
 
-        this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
-        this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
+        // this.ctx.canvas.addEventListener("keydown", event => this.keys[event.key] = true);
+        // this.ctx.canvas.addEventListener("keyup", event => this.keys[event.key] = false);
+        var that = this;
+
+        this.ctx.canvas.addEventListener("keydown", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = true;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = true;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = true;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = true;
+                    break;
+                case "KeyE":
+                that.E = true;
+                break;
+                case "Digit1":
+                    that.digit1 = true;
+                    break;
+                case "Space":
+                    that.jump= true;
+                    break;
+            }
+        }, false);
+        this.ctx.canvas.addEventListener("keyup", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = false;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = false;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = false;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = false;
+                    break;
+                case "KeyE":
+                    that.E = false;
+                    break;
+                case "Digit1":
+                    that.digit1 = false;
+                    break;
+                case "Space":
+                    that.jump = false;
+                    break;
+            }
+        }, false);
+        
+        function isFocused() {
+            const elem = document.getElementById("gameWorld");
+    
+            if (elem === document.activeElement) {
+                //console.log("focused gained")
+                that.inCanvas = true;
+            }
+            else {
+                //console.log("focused lost")
+                that.inCanvas = false;
+            }
+        }
+        setInterval(isFocused, 300);
     };
+     
 
     addEntity(entity) {
         this.entities.push(entity);
+    };
+    addEntityToBegin(entity) {
+        this.entities.unshift(entity);
     };
 
     draw() {
@@ -86,6 +180,7 @@ class GameEngine {
         for (let i = this.entities.length - 1; i >= 0; i--) {
             this.entities[i].draw(this.ctx, this);
         }
+        this.camera.draw(this.ctx);
     };
 
     update() {
@@ -98,13 +193,14 @@ class GameEngine {
                 entity.update();
             }
         }
-
+        this.camera.update();
         for (let i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
                 this.entities.splice(i, 1);
             }
         }
     };
+
 
     loop() {
         this.clockTick = this.timer.tick();
