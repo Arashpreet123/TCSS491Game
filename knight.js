@@ -7,7 +7,7 @@ class knight{
         this.spritesheetLeft = assetMangager.getAsset("./knight_sprite_full_Left.png");
         this.velocity = {x:0, y:0};
         this.x = 0;
-        this.y = 0;
+        this.y = 550;
         this.speed = 400;
         this.facing = 0; //0=right, 1 = left
         this.state = 0; // 0 = idle, 1 = running, 2 = jumping/falling 
@@ -15,6 +15,7 @@ class knight{
             idle: 0,        
             jump: 1,
         }
+        this.hp = 3;
         this.playerJump = false;
         //animations
         this.updateBB();
@@ -47,12 +48,23 @@ class knight{
 
     updateBB(){
         this.lastBB = this.BB;
-        if(this.state === 0){
-            this.BB = new BoundingBox(this.x+60, this.y+10, 80, 170);
+        if(this.facing === 0){
+            if(this.state === 0){
+                this.BB = new BoundingBox(this.x+35, this.y+10, 40, 90);
+            }
+            else if(this.state === 1){
+                this.BB = new BoundingBox(this.x+35, this.y+10, 40, 90);
+            }
         }
-        else if(this.state === 1){
-            this.BB = new BoundingBox(this.x+60, this.y+10, 80, 170);
+        else{
+            if(this.state === 0){
+                this.BB = new BoundingBox(this.x+20, this.y+10, 40, 90);
+            }
+            else if(this.state === 1){
+                this.BB = new BoundingBox(this.x+20, this.y+10, 40, 90);
+            }
         }
+
         // this.topBB = new BoundingBox(this.x+20, this.y+130, PARAMS.PLAYERWIDTH, 0);
         // this.rightBB = new BoundingBox(this.x+20+PARAMS.PLAYERWIDTH, this.y+130, 0, PARAMS.PLAYERHEIGHT);
         // this.leftBB = new BoundingBox(this.x+20, this.y+130, 0, PARAMS.PLAYERHEIGHT);  
@@ -62,13 +74,16 @@ class knight{
         const DE_ACC = 200;
         const RUN = 100;
         const MAXFALL = 200;
-        this.velocity.y += 50 * TICK;
+        this.velocity.y += 200 * TICK;
         
         if(this.state != this.states.jump){
             if (this.game.left) {
+                this.facing = 1;
                 this.velocity.x -= RUN;
             }
             if (this.game.right) {
+                this.facing = 0;
+
                 this.velocity.x += RUN;
             }  
             if(!this.game.left && !this.game.right){
@@ -77,7 +92,7 @@ class knight{
             if(this.game.jump){
                 console.log("JUMp");
                 this.state = this.states.jump;  
-                this.velocity.y = -50*TICK;
+                this.velocity.y = -150;
                 this.animations[this.state][this.facing].elapsedTime = 0;
                 
                 this.playerJump = false;
@@ -85,8 +100,15 @@ class knight{
             
         }
         else{
-            
-            this.animations[this.state][this.facing].elapsedTime = 0;
+            if(this.animations[this.state][this.facing].currentFrame() >= 6){
+                this.animations[this.state][this.facing].elapsedTime = 0.48;
+
+            }
+            if (this.game.right && !this.game.left) {
+                this.velocity.x += 0.8;
+            } else if (this.game.left && !this.game.right) {
+                this.velocity.x -= 0.8;
+            }
             
         }
         var that = this;
@@ -102,15 +124,21 @@ class knight{
                         that.updateBB();
                     }
                 }
+                if(entity instanceof Item){
+                    that.hp = 0;
+                    that.removeFromWorld = true;
+                }
                 }
         });
+        if (this.velocity.x >= RUN) this.velocity.x = RUN;
+        if (this.velocity.x <= -RUN) this.velocity.x = -RUN;
         this.x += this.velocity.x * TICK * PARAMS.SCALE;
         this.y += this.velocity.y * TICK * PARAMS.SCALE;
         this.updateBB();
     }
 
     draw(ctx) {
-        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, PARAMS.SCALE/2);
+        this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, .8);
         // if(debug){
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
