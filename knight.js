@@ -89,11 +89,17 @@ class knight{
                 this.velocity.x -= RUN;
             }
             if (this.game.right) {
+                if(!this.music){
+                    assetMangager.pauseBackgroundMusic();
+                    assetMangager.playAsset("./sound/soundTrack.mp3");
+                    this.music = true;
+                }
                 this.facing = 0;
 
                 this.velocity.x += RUN;
             }  
             if(!this.game.left && !this.game.right){
+                
                 this.velocity.x = 0;
             }     
             if(this.game.jump){
@@ -141,6 +147,12 @@ class knight{
         if (this.velocity.x <= -RUN) this.velocity.x = -RUN;
         this.x += this.velocity.x * TICK * PARAMS.SCALE;
         this.y += this.velocity.y * TICK * PARAMS.SCALE;
+        if(this.x < -20){
+            this.x = -20;
+        }
+        if(this.x >= 950){
+            this.x = 950;
+        }
         this.updateBB();
     }
 

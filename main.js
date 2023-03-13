@@ -1,9 +1,10 @@
 var assetMangager = new AssetManager();
+assetMangager.queueDownload("./sound/soundTrack.mp3");
+
 assetMangager.queueDownload("./knight_sprite_full.png");
 assetMangager.queueDownload("./knight_sprite_full_Left.png");
 assetMangager.queueDownload("./spritesheet/Background.png");
 assetMangager.queueDownload("./spritesheet/arrow.png");
-assetMangager.queueDownload("./sound/soundTrack.mp3");
 
 assetMangager.downloadAll(() => {
 assetMangager.autoRepeat("./sound/soundTrack.mp3");
