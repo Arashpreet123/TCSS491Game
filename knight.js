@@ -81,8 +81,7 @@ class knight{
         if(this.state != this.states.jump){
             if (this.game.left) {
                 if(!this.music){
-                    assetMangager.pauseBackgroundMusic();
-                    assetMangager.playAsset("./soundTrack.mp3");
+                    assetMangager.playAsset("./soundTrack.wav");
                     this.music = true;
                 }
                 this.facing = 1;
@@ -90,8 +89,7 @@ class knight{
             }
             if (this.game.right) {
                 if(!this.music){
-                    assetMangager.pauseBackgroundMusic();
-                    assetMangager.playAsset("./soundTrack.mp3");
+                    assetMangager.playAsset("./soundTrack.wav");
                     this.music = true;
                 }
                 this.facing = 0;

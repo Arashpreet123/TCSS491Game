@@ -4,10 +4,10 @@ assetMangager.queueDownload("./knight_sprite_full.png");
 assetMangager.queueDownload("./knight_sprite_full_Left.png");
 assetMangager.queueDownload("./spritesheet/Background.png");
 assetMangager.queueDownload("./spritesheet/arrow.png");
-assetMangager.queueDownload("./soundTrack.mp3");
+assetMangager.queueDownload("./soundTrack.wav");
 
 assetMangager.downloadAll(() => {
-assetMangager.autoRepeat("./soundTrack.mp3");
+assetMangager.autoRepeat("./soundTrack.wav");
 
 var canvas = document.getElementById('gameWorld');
 var ctx = canvas.getContext('2d');
