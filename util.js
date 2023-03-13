@@ -25,10 +25,14 @@ window.requestAnimFrame = (function () {
 })();
 
 // add global parameters here
-let debug = true;
+
 const PARAMS = {
     DEBUG: true,
     SCALE: 3,
     BITWIDTH: 60,
     BITHEIGHT: 30
 };
+let debug = false;
+function debugOn() {
+    debug = !debug;
+}

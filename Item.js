@@ -45,9 +45,9 @@ class Item{
     draw(ctx){
         // console.log(this.state);
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, 2.5);
-        
-        ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
-        
+        if(debug){
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
     };
 };

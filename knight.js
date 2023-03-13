@@ -21,6 +21,8 @@ class knight{
         this.updateBB();
         this.animations = [];
         this.loadAnimations();
+        this.music =false;
+        
     };
 
     loadAnimations() {
@@ -78,6 +80,11 @@ class knight{
         
         if(this.state != this.states.jump){
             if (this.game.left) {
+                if(!this.music){
+                    assetMangager.pauseBackgroundMusic();
+                    assetMangager.playAsset("./sound/soundTrack.mp3");
+                    this.music = true;
+                }
                 this.facing = 1;
                 this.velocity.x -= RUN;
             }
@@ -139,11 +146,11 @@ class knight{
 
     draw(ctx) {
         this.animations[this.state][this.facing].drawFrame(this.game.clockTick, ctx, this.x, this.y, .8);
-        // if(debug){
+        if(debug){
             ctx.strokeStyle = 'Red';
             ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
             // ctx.strokeRect(this.rightBB.x-this.game.camera.x, this.rightBB.y-this.game.camera.y, this.rightBB.width, this.rightBB.height);
-            // }
+            }
     };
 
 

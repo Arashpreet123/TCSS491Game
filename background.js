@@ -13,7 +13,9 @@ class BackGround {
     };
     draw(ctx) {
         ctx.drawImage(this.spritesheet,this.x ,this.y, this.w, this.h);
-        ctx.strokeStyle = 'Red';
-        ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        if(debug){
+            ctx.strokeStyle = 'Red';
+            ctx.strokeRect(this.BB.x, this.BB.y, this.BB.width, this.BB.height);
+        }
     };
 };
