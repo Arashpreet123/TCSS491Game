@@ -82,7 +82,7 @@ class knight{
             if (this.game.left) {
                 if(!this.music){
                     assetMangager.pauseBackgroundMusic();
-                    assetMangager.playAsset("./sound/soundTrack.mp3");
+                    assetMangager.playAsset("./soundTrack.mp3");
                     this.music = true;
                 }
                 this.facing = 1;
@@ -91,7 +91,7 @@ class knight{
             if (this.game.right) {
                 if(!this.music){
                     assetMangager.pauseBackgroundMusic();
-                    assetMangager.playAsset("./sound/soundTrack.mp3");
+                    assetMangager.playAsset("./soundTrack.mp3");
                     this.music = true;
                 }
                 this.facing = 0;
